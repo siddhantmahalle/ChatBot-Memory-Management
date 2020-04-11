@@ -15,6 +15,7 @@ ChatBot::ChatBot()
     _image = nullptr;
     _chatLogic = nullptr;
     _rootNode = nullptr;
+    //_currentNode = nullptr;
 }
 
 // constructor WITH memory allocation
@@ -25,6 +26,7 @@ ChatBot::ChatBot(std::string filename)
     // invalidate data handles
     _chatLogic = nullptr;
     _rootNode = nullptr;
+    //_currentNode = nullptr;
 
     // load image into heap memory
     _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
@@ -44,7 +46,69 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+ChatBot::ChatBot(const ChatBot &source) {
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+    _image = new wxBitmap(*source._image);
 
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+}
+
+ChatBot &ChatBot::operator=(const ChatBot &source) {
+    std::cout << "ChatBot Copy Assign Constructor" << std::endl;
+    if (&source == this) { return *this; }
+
+    if(_image != NULL) { delete _image; }
+
+    _image = new wxBitmap(*source._image);
+
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;    
+
+    return *this;
+}
+
+ChatBot::ChatBot(ChatBot &&source) {
+    std::cout << "Chatbot Move Constructor" << std::endl;
+
+    _image = source._image;
+
+    //_currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+
+    source._image = NULL;
+
+    source._currentNode = nullptr;
+    //source._rootNode = nullptr;
+    source._chatLogic = nullptr;
+
+}
+
+ChatBot &ChatBot::operator=(ChatBot &&source) {
+    std::cout << "Chatbot Move Assign Constructor" << std::endl;
+    if (&source == this) { return *this; }
+
+    if(_image != NULL) { delete _image; }
+
+    _image = source._image;
+
+    //_currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+
+    source._image = NULL;
+
+    source._currentNode = nullptr;
+    //source._rootNode = nullptr;
+    source._chatLogic = nullptr;
+
+    return *this;
+}
 ////
 //// EOF STUDENT CODE
 
